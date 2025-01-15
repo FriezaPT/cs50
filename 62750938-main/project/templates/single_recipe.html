@@ -1,0 +1,122 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    - {{ page_title }}
+{% endblock %}
+
+{% block main %}
+
+
+<div class="mb-3">
+    <form action="/ingredients" method="post">
+        <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="hidden" name="is_edit" value="{{ is_edit }}">
+                <input type="hidden" name="id" value="{{ ingredient.id }}">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" name="name" placeholder="Ingredient name" class="form-control" value="{{ingredient.name}}">
+              </div>
+            </div>
+            <div class="col-md-6">
+                <label for="type" class="form-label">Type of ingredient</label>
+                <select name="type" class="form-control">
+                {% for type in type_options %}
+                  <option value="{{ type.id }}" {% if selected_type == type.name %}selected{% endif %}>{{ type.name }}</option>
+                {% endfor %}
+                </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="quantity" class="form-label">Quantity sold</label>
+                <input type="number" id="quantity" name="quantity" class="form-control" value="{{ingredient.quantity}}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="unit" class="form-label">Unit sold by</label>
+                <input type="text" id="unit" name="unit" class="form-control" value="{{ingredient.unit}}">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="yield" class="form-label">Yield %</label>
+                <input type="number" id="yield" min=1 max=100 name="yield" class="form-control" value="{{ingredient.yield}}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="price-unit" class="form-label">Price per unit</label>
+                <input type="number" id="price-unit" name="price_unit" class="form-control" value="{{ingredient.price_unit}}">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="adjusted-price" class="form-label">Adjusted price</label>
+                <input type="number" id="adjusted-price" name="adjusted_price" class="form-control" readonly value="{{ingredient.adjusted_price}}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="vat-percentage-1" class="form-label">VAT percentage</label>
+                <input type="number" id="vat-percentage" name="vat_percentage" step="1" class="form-control" value="{{ingredient.vat_percentage}}">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="price-with-vat" class="form-label">Base price with VAT</label>
+                <input type="number" id="price-with-vat" name="price_with_vat" step="0.01" class="form-control" readonly value="{{ingredient.price_with_vat}}">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="adjusted-price-with-vat" class="form-label">Adjusted price with VAT</label>
+                  <input type="number" id="adjusted-price-with-vat" name="adjusted_price_with_vat" step="0.01" class="form-control" readonly value="{{ingredient.adjusted_price_with_vat}}">
+                </div>
+              </div>
+            <div class="col-md-6">
+              <label for="supplier" class="form-label">Supplier</label>
+              <select name="supplier" id="supplier" required class="form-control">
+                {% for supplier in supplier_options %}
+                  <option value="{{ supplier.id }}" {% if selected_supplier == supplier.name %}selected{% endif %}>{{ supplier.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="allergens" class="form-label">Allergens</label>
+                <select name="allergens" id="allergens" multiple required class="form-control">
+                  {% for allergen in allergens_list %}
+                    <option value="{{ allergen }}" {% if allergen in selected_allergens %}selected{% endif %}>{{ allergen }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="obs" class="form-label">Observations/Comments</label>
+              <textarea name="obs" placeholder="Observations" id="obs" class="form-control" rows="4" cols="50" value="{{ingredient.obs}}"></textarea>
+            </div>
+          </div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary">{{ page_title }}</button>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

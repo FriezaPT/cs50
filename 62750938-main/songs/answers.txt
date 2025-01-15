@@ -1,0 +1,11 @@
+The avg danceability for the user is 0.71646.
+The avg valence for the user is 0.484443
+The avg energy for the user is 0.65906
+
+
+According to the article provided, it should indicate a orange aura, based on high danceability and energy and a median valence.
+
+This way to calculate may not be entirely perfect because relying on the mean means that a lot of information can be lost. For example, the person can have periods of listening to music with a lot of valence, and periods of music with a really low amount. It technicaly evens out at the middle, but is not really representative of the person.
+Furthermore, a year is a long period to measure, meaning that there can be smaller periods of time characterized by different vlaues on the music heard. For example, the person can be at near top the music energy for a period of time (like the summer) and then drop down significantly during winter.
+
+I believe using smaller amounts of time to measure and then checking the similarity between them, we could get a better picture of the listener, and the potential fluctuations during the year.

@@ -1,0 +1,20 @@
+<table id="ingredient_table" class="table table-striped mt-3">
+    <thead>
+        <tr>
+        <th>Name</th>
+        <th>Supplier</th>
+        <th>Quantity</th>
+        <th>Estimated Cost</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ingredient in processed_data.values() %}
+        <tr>
+        <td>{{ingredient.name}}</td>
+        <td>{{ingredient.supplier}}</td>
+        <td>{{ingredient.quantity}}</td>
+        <td>€{{ingredient.cost}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block title %}
+   - recipes
+{% endblock %}
+
+{% block main %}
+<div class="mb-3">
+    <form action="/add_recipe" method="get">
+        <input type="hidden" name="is_new" value=1>
+        <button class="btn btn-primary">Add recipe</button>
+    </form>
+</div>
+
+<div class="mb-3">
+    <form action="/order_ingredients" method="post">
+        <input type="hidden" name="is_new" value=0>
+        <input type="hidden" name="referer" value="recipe">
+        <table class="table table-striped" id="recipes_table">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">description</th>
+                <th scope="col">Method</th>
+                <th scope="col">Yield</th>
+                <th scope="col">Price per portion</th>
+                <th scope="col">Price per recipe</th>
+                <!-- <th scope="col">Is a subrecipe?</th> -->
+                <th scope="col">Actions</th>
+                <th scope="col">Add to Order</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for recipe in recipes_list %}
+                    <tr>
+                        <td>{{recipe.name}}</td>
+                        <td>{{recipe.description}}</td>
+                        <td>{{recipe.method}}</td>
+                        <td>{{recipe.yield}}</td>
+                        <td>{{recipe.price_portion}}</td>
+                        <td>{{recipe.price_total}}</td>
+                        <!-- <td>{% if recipe.is_subrecipe == 0 %}No{% endif %}{% if recipe.is_subrecipe == 1 %}Yes{% endif %}</td> -->
+                        <td><a href="/single_recipe?id={{recipe.id}}" class="btn btn-secondary btn-sm">View</a>
+                            <a href="/add_recipe?id={{recipe.id}}" class="btn btn-info btn-sm">Edit</a>
+                            <a href="/add_recipe?id={{recipe.id}}&delete=true" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete?')">Delete</a>
+                        </td>
+                        <td><input type="hidden" name="recipe_{{recipe.id}}" value="{{recipe.id}}"><input type="checkbox" name="checkbox_{{recipe.id}}" id="checkbox_{{recipe.id}}"><input type="number" min="1" id="quantity_{{recipe.id}}" name="quantity_{{recipe.id}}" value="1" style="display:none;"></td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Order recipes</button>
+    </form>
+</div>
+
+<script>
+    jQuery(document).ready(function() {
+        jQuery('#recipes_table').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "info": false,
+            "searching": true,
+            "orderable": true
+        });
+
+        jQuery('input[type="checkbox"]').on('change', function() {
+            if ($(this).is(':checked')) {
+                var id = jQuery(this).attr('id');
+                var number = id.split('_')[1];
+                jQuery("#quantity_" + number).fadeIn();
+                console.log($(this).attr('id') + ' is checked');
+            } else {
+                var id = jQuery(this).attr('id');
+                var number = id.split('_')[1];
+                jQuery("#quantity_" + number).fadeOut();
+                console.log($(this).attr('id') + ' is unchecked');
+            }
+        });
+});
+</script>
+{% endblock %}

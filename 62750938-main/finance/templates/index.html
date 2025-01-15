@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block main %}
+<div class="mb-3">
+    <h3>Cash balance: {{ cash }}</h3>
+    <h3>Total holdings:{{ total_value }}</h3>
+</div>
+<div class="mb-3">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Symbol</th>
+            <th scope="col">Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+            <th scope="col">Total Value</th>
+        </tr>
+        </thead>
+        <tbody>
+
+            {% for key, info in treated_info.items() %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td>{{ info["name"] }}</td>
+                    <td>{{ info["quantity"] }}</td>
+                    <td>{{ info["unit_price"] }}</td>
+                    <td>{{ info["total_value"] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

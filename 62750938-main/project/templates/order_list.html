@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}
+   - Ingredients
+{% endblock %}
+
+{% block main %}
+
+<div class="mb-3">
+    <form action="/order_ingredients" method="post">
+        <input type="hidden" name="referer" value="ingredient">
+        <button class="btn btn-primary">New order</button>
+    </form>
+</div>
+
+<div class="mb-3">
+    <h3>Orders</h3>
+    <table class="table table-striped" id="order_table">
+        <thead>
+        <tr>
+            <th scope="col">Ordered By</th>
+            <th scope="col">Date</th>
+            <th scope="col">Estimated Price</th>
+            <th scope="col">Suppliers</th>
+            <th scope="col">View</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{order.placed_by}}</td>
+                    <td>{{order.order_date}}</td>
+                    <td>{{order.estimated_price}}</td>
+                    <td>{{order.suppliers}}</td>
+                    <td><a href="/orders?id={{order.id}}" class="btn btn-secondary btn-sm">View</a></td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

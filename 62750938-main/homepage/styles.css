@@ -1,0 +1,33 @@
+.work-photo{
+    height:200px;
+    width: auto;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon{
+    background-color: red;
+}
+
+#title{
+    display: inline;
+    color: red;
+    border: 3px dotted;
+    border-color: red;
+}
+
+#title:hover{
+    color: green;
+}
+
+#contact:hover,
+#openForm:hover{
+    color: green !important;
+}
+
+body{
+    margin: 0% 10% 0% 10%;
+}
+
+p{
+    font-size: 1.3rem;
+}

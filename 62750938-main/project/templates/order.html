@@ -1,0 +1,128 @@
+{% extends "layout.html" %}
+
+{% block title %}
+   - Ingredients
+{% endblock %}
+
+{% block main %}
+
+{{selected_recipes}}
+
+<div class="mb-3">
+    <form action="/orders?confirm=1" method="post">
+        {% for supplier in supplier_list %}
+            <div id="table_{{supplier.id}}" style="display: none;">
+                <h3>{{supplier.name}}</h3>
+                <table class="table table-striped" >
+                    <thead>
+                        <th scope="col">Name</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Actions</th>
+                    </thead>
+                    <tbody>
+                        {% for ingredient in ingredients_list %}
+                            {% if ingredient.supplier == supplier.id %}
+                            <input type="hidden" id="order_{{ingredient.id}}" name="order_{{ingredient.id}}" value="{% if ingredient.id|string not in selected_ingredients %}false {% else %}true{% endif %}">
+                                <tr id="row_{{ingredient.id}}" style="{% if ingredient.id|string not in selected_ingredients %}display:none;{% endif %}">
+                                    <td>{{ingredient.name}}</td>
+                                    <td><input type="number" name="quantity_{{ingredient.id}}"  min=0 value="{{ selected_ingredients.get(ingredient.id|string, {'quantity': 0}).quantity|int }}">{{ingredient.unit}}</td>
+                                    <td><button class="btn btn-danger btn-sm" onclick="if (confirm('Are you sure you want to delete?')) { removeFromOrder({{ingredient.id}}, {{ingredient.supplier}}); } return false;">Remove from the order</button></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary">Confirm Order</button>
+            </form>
+            <button type="button" onclick="history.back()" class="btn btn-primary">Go back</button>
+        </div>
+</div>
+
+
+<div class="mb-3">
+        <table class="table table-striped" id="ingredient_table">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Quantity Sold</th>
+                <th scope="col">Yield %</th>
+                <th scope="col">Price/Unit</th>
+                <th scope="col">Adjusted Price</th>
+                <th scope="col">VAT %</th>
+                <th scope="col">Price with VAT</th>
+                <th scope="col">Supplier</th>
+                <th scope="col">Allergens</th>
+                <th scope="col">Observations</th>
+                <th scope="col">Add to Order</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for ingredient in ingredients_list %}
+                    <tr>
+                        <td>{{ingredient.name}}</td>
+                        <td>{{ingredient.type_name}}</td>
+                        <td>{{ingredient.quantity}}{{ingredient.unit}}</td>
+                        <td>{{ingredient.yield}}</td>
+                        <td>{{ingredient.price_unit}}</td>
+                        <td>{{ingredient.adjusted_price}}</td>
+                        <td>{{ingredient.vat_percentage}}</td>
+                        <td>{{ingredient.price_with_vat}}</td>
+                        <td>{{ingredient.supplier_name}}</td>
+                        <td>{{ingredient.allergens | join(", ")}}</td>
+                        <td>{{ingredient.obs}}</td>
+                        <td><button class="btn btn-danger btn-sm" onclick="addToOrder({{ingredient.id}}, {{ingredient.supplier}})">Add</button></td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+</div>
+
+<script>
+    jQuery(document).ready(function() {
+        jQuery('#ingredient_table').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "info": false,
+            "searching": true,
+            "orderable": true
+        });
+
+        // To check if there is the need to show the tables, will be hidden by default
+        jQuery("input[type='hidden'][id^='order_']").each(function() {
+            if (jQuery(this).val() === "true"){
+                jQuery(this).closest('div').show();
+            }
+        });
+
+    });
+
+    function removeFromOrder(id, supplier){
+        console.log("Got to the function with the id: " + id + "and supplier: " + supplier);
+        jQuery("#row_" + id).hide();
+        jQuery("#order_" + id).val("false");
+        is_empty = 1;
+        jQuery("#table_" + supplier + " input[type='hidden'][id^='order_']").each(function() {
+            console.log("is_empty=" + is_empty);
+            if (jQuery(this).val() === "true"){
+
+                is_empty = 0;
+            }
+        });
+        if (is_empty == 1){
+            jQuery("#table_" + supplier).hide();
+        }
+    }
+
+    function addToOrder(id, supplier){
+        console.log("Got to the addToOrder function with the id: " + id + "and supplier: " + supplier);
+        jQuery("#row_" + id).show();
+        jQuery("#order_" + id).val("true");
+        jQuery("#table_" + supplier).show();
+    }
+</script>
+{% endblock %}

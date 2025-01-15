@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    - Order Details
+{% endblock %}
+
+{% block main %}
+<div class="mb-3">
+    <h3 class="text-center">Order {{order_id}} Details</h3>
+      <div class="row g-0">
+        <div class="col-md-6 p-4 bg-light">
+          <p><strong>Placed By:</strong> {{user_name[0].name}}</p>
+
+        </div>
+        <div class="col-md-6 p-4 bg-light">
+            <p>Estimated Cost: <strong>€{{total_cost|round(2)}}</strong></p>
+        </div>
+      </div>
+      <h4 class="text-center">Ingredients</h4>
+      {% include 'order_table.html' %}
+
+      <div class="row g-0">
+      </div>
+
+</div>
+<button type="button" class="btn btn-primary btn-lg no-print" onclick="window.print()">Print</button>
+
+<script>
+  jQuery(document).ready(function() {
+      jQuery('#ingredient_table').DataTable({
+          "paging": false,
+          "lengthChange": false,
+          "info": false,
+          "searching": false,
+          "orderable": true
+      });
+  });
+</script>
+
+<style>
+  @media print {
+  .no-print {
+    display: none;
+  }
+}
+</style>
+
+{% endblock %}

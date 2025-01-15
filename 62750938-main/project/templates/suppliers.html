@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}
+   - Suppliers
+{% endblock %}
+
+{% block main %}
+<div class="mb-3">
+    <form action="/add_supplier" method="get">
+        <input type="hidden" name="is_new" value=1>
+        <button class="btn btn-primary">Add Supplier</button>
+    </form>
+</div>
+
+<div class="mb-3">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Organization Name</th>
+                <th scope="col">Salesperson</th>
+                <th scope="col">Telephone</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Observations</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for supplier in suppliers_list %}
+                    <tr>
+                        <td>{{supplier.name}}</td>
+                        <td>{{supplier.contact_person}}</td>
+                        <td>{{supplier.phone}}</td>
+                        <td>{{supplier.email}}</td>
+                        <td>{{supplier.obs}}</td>
+                        <td><a href="/add_supplier?id={{supplier.id}}" class="btn btn-info btn-sm">Edit</a><a href="/add_supplier?id={{supplier.id}}&delete=true" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete?')">Delete</a></td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+</div>
+{% endblock %}

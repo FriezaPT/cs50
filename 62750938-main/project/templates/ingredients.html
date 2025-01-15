@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block title %}
+   - Ingredients
+{% endblock %}
+
+{% block main %}
+
+<div class="mb-3">
+    <form action="/add_ingredient" method="get">
+        <input type="hidden" name="is_new" value=1>
+        <button class="btn btn-primary">Add Ingredient</button>
+    </form>
+</div>
+
+<div class="mb-3">
+    <form action="/order_ingredients" method="post">
+        <input type="hidden" name="is_new" value=0>
+        <input type="hidden" name="referer" value="ingredient">
+        <table class="table table-striped" id="ingredient_table">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Quantity Sold</th>
+                <th scope="col">Yield %</th>
+                <th scope="col">Price/Unit</th>
+                <th scope="col">Adjusted Price</th>
+                <th scope="col">VAT %</th>
+                <th scope="col">Price with VAT</th>
+                <th scope="col">Supplier</th>
+                <th scope="col">Allergens</th>
+                <th scope="col">Observations</th>
+                <th scope="col">Actions</th>
+                <th scope="col">Add to Order</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for ingredient in ingredients_list %}
+                    <tr>
+                        <td>{{ingredient.name}}</td>
+                        <td>{{ingredient.type_name}}</td>
+                        <td>{{ingredient.quantity}}{{ingredient.unit}}</td>
+                        <td>{{ingredient.yield}}</td>
+                        <td>{{ingredient.price_unit}}</td>
+                        <td>{{ingredient.adjusted_price}}</td>
+                        <td>{{ingredient.vat_percentage}}</td>
+                        <td>{{ingredient.price_with_vat}}</td>
+                        <td>{{ingredient.supplier_name}}</td>
+                        <td>{{ingredient.allergens | join(", ")}}</td>
+                        <td>{{ingredient.obs}}</td>
+                        <td><a href="/add_ingredient?id={{ingredient.id}}" class="btn btn-info btn-sm">Edit</a><a href="/add_ingredient?id={{ingredient.id}}&delete=true" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete?')">Delete</a></td>
+                        <td><input type="checkbox" name="ingredients" value="{{ingredient.id}}"></td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Order ingredients</button>
+    </form>
+
+</div>
+
+<script>
+    jQuery(document).ready(function() {
+        jQuery('#ingredient_table').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "info": false,
+            "searching": true,
+            "orderable": true
+        });
+    });
+</script>
+{% endblock %}

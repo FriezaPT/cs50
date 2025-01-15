@@ -1,0 +1,24 @@
+HTML tags:
+
+<p>
+<span>
+<img>
+<strong>
+<table>
+<thead>
+<tr>
+<td>
+<ul>
+<li>
+<div>
+
+CSS properties:
+height
+width
+color
+background-color
+border
+border-color
+margin
+
+I chose to use bootstrap for a image carousel and some formatting, and used javascript to create a contact form (that does not actually send an email but the code is commented out).

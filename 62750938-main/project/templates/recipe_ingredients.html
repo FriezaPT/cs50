@@ -1,0 +1,114 @@
+<div class="mt-2">
+    <h3>Recipe Ingredients: </h3>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Observations</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for ingredient in ingredients_list %}
+                <tr>
+                    <form action="/recipe_ingredient" method="post">
+                        <input type="hidden" id="recipe_ingredient_id" name="recipe_ingredient_id" value="{{ingredient.id}}">
+                        <input type="hidden" id="is_edit" name="is_edit" value=1>
+                        <input type="hidden" id="recipe_id" name="recipe_id" value={{recipe.id}}>
+                        <td><span class="ingredient_{{ingredient.id}}">{{ingredient.name}}</span>
+                            <select name="ingredient_id" id="ingredient_id" required class="d-none form_{{ingredient.id}} form-control">
+                                {% for ingredient in ingredients_options %}
+                                <option value={{ingredient.id}}>{{ingredient.name}}</option>
+                                {% endfor %}
+                          </select>
+                        </td>
+                        <td><span class="ingredient_{{ingredient.id}}">{{ingredient.quantity}}</span>
+                            <input type="number" id="ingredient_quantity" name="ingredient_quantity" step="0.01" value={{ingredient.quantity}} class="d-none form_{{ingredient.id}} form-control">
+                        </td>
+                        <td>
+                            <span class="ingredient_{{ingredient.id}}" >{{ingredient.obs}}</span>
+                            <input type="text" id="ingredient_observations" name="ingredient_observations" value="{{ingredient.obs}}" class="d-none form_{{ingredient.id}} form-control">
+                        </td>
+                        <td><a class="btn btn-info btn-sm edit-button ingredient_{{ingredient.id}}" id={{ingredient.id}}>Edit</a>
+                            <button type="submit" class="btn btn-primary d-none form_{{ingredient.id}}">Confirm changes</button>
+                            <a href="/recipe_ingredient?ingredient_id={{ingredient.id}}&recipe_id={{recipe.id}}&delete=true" class="btn btn-danger btn-sm ingredient_{{ingredient.id}}" onclick="return confirm('Are you sure you want to delete?')">Delete</a>
+                            <a class="btn btn-danger btn-sm d-none form_{{ingredient.id}} cancel-button" id={{ingredient.id}}>Cancel</a>
+                        </td>
+                    </form>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+    <form action="/recipe_ingredient" method="post">
+    <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
+    <div class="row" id="ingredient">
+        <h3>Add new ingredient</h3>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="description" class="form-label">Ingredient</label>
+            <select name="ingredient_id" id="ingredient_id" required class="form-control">
+              {% for ingredient in ingredients_options %}
+              <option value={{ingredient.id}}>{{ingredient.name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="price_total" class="form-label">Quantity</label>
+                <input type="number" id="ingredient_quantity" name="ingredient_quantity" step="0.01" class="form-control" value=0>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="obs" class="form-label">Observations</label>
+                <input type="text" id="ingredient_observations" name="ingredient_observations" class="form-control" value="">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Add ingredient</button>
+        </div>
+      </div>
+    </form>
+</div>
+
+
+<script>
+    let ingredient_name = "ingredient_" + this.id;
+    document.querySelectorAll(".edit-button").forEach(button => {
+        button.addEventListener("click", function() {
+            console.log("Clicked Edit button");
+            ingredient_name = "ingredient_" + this.id;
+            form_name = "form_" + this.id;
+            // Hide the spans
+            document.querySelectorAll("." + ingredient_name).forEach(element => {
+                element.classList.add("d-none");
+            });
+            // Show the forms
+            document.querySelectorAll("." + form_name).forEach(element => {
+                element.classList.remove("d-none");
+            });
+
+        });
+    });
+
+    document.querySelectorAll(".cancel-button").forEach(button => {
+        button.addEventListener("click", function() {
+            console.log("Clicked button");
+            ingredient_name = "ingredient_" + this.id;
+            form_name = "form_" + this.id;
+            // Hide the spans
+            document.querySelectorAll("." + ingredient_name).forEach(element => {
+                element.classList.remove("d-none");
+            });
+            // Show the forms
+            document.querySelectorAll("." + form_name).forEach(element => {
+                element.classList.add("d-none");
+            });
+
+        });
+    });
+</script>

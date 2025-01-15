@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Welcome {{name}}
+{% endblock %}
+
+{% block main %}
+<div class="mb-3">
+    <h3>Latest Order </h3>
+    {% include 'order_table.html' %}
+</div>
+<div class="mb-3 pt-4">
+    <h3>Recently Updated Recipes</h3>
+    <table class="table table-striped" id="recipes_table">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">description</th>
+            <th scope="col">Method</th>
+            <th scope="col">Yield</th>
+            <th scope="col">Price per portion</th>
+            <th scope="col">Price per recipe</th>
+            <!-- <th scope="col">Is a subrecipe?</th> -->
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for recipe in recipes_list %}
+                <tr>
+                    <td>{{recipe.name}}</td>
+                    <td>{{recipe.description}}</td>
+                    <td>{{recipe.method}}</td>
+                    <td>{{recipe.yield}}</td>
+                    <td>{{recipe.price_portion}}</td>
+                    <td>{{recipe.price_total}}</td>
+                    <!-- <td>{% if recipe.is_subrecipe == 0 %}No{% endif %}{% if recipe.is_subrecipe == 1 %}Yes{% endif %}</td> -->
+                    <td><a href="/single_recipe?id={{recipe.id}}" class="btn btn-secondary btn-sm">View</a></td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    - {{ page_title }}
+{% endblock %}
+
+{% block main %}
+
+<div class="mb-3">
+    <form action="/ingredients" method="post">
+        <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <input type="hidden" name="is_edit" value="{{ is_edit }}">
+                <input type="hidden" name="id" value="{{ ingredient.id }}">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" name="name" placeholder="Ingredient name" class="form-control" value="{{ingredient.name}}">
+              </div>
+            </div>
+            <div class="col-md-4">
+                <label for="type" class="form-label">Type of ingredient</label>
+                <select name="type" class="form-control">
+                {% for type in type_options %}
+                  <option value="{{ type.id }}" {% if selected_type == type.name %}selected{% endif %}>{{ type.name }}</option>
+                {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="quantity" class="form-label">Quantity sold</label>
+                <input type="number" id="quantity" name="quantity" class="form-control" value="{{ingredient.quantity}}">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="unit" class="form-label">Unit sold by</label>
+                <select id="unit" name="unit" class="form-control">
+                  {% for unit in units %}
+                    <option value="{{ unit }}" {% if unit == ingredient.unit %}selected{% endif %}>{{ unit }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="yield" class="form-label">Yield %</label>
+                <input type="number" id="yield" min=1 max=100 name="yield" class="form-control" value="{{ingredient.yield}}">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="price-unit" class="form-label">Price per unit</label>
+                <input type="number" id="price-unit" name="price_unit" class="form-control" value="{{ingredient.price_unit}}">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="adjusted-price" class="form-label">Adjusted price</label>
+                <input type="number" id="adjusted-price" name="adjusted_price" class="form-control" readonly value="{{ingredient.adjusted_price}}">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="vat-percentage-1" class="form-label">VAT percentage</label>
+                <input type="number" id="vat-percentage" name="vat_percentage" step="1" class="form-control" value="{{ingredient.vat_percentage}}">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="price-with-vat" class="form-label">Base price with VAT</label>
+                <input type="number" id="price-with-vat" name="price_with_vat" step="0.01" class="form-control" readonly value="{{ingredient.price_with_vat}}">
+              </div>
+            </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="adjusted-price-with-vat" class="form-label">Adjusted price with VAT</label>
+                  <input type="number" id="adjusted-price-with-vat" name="adjusted_price_with_vat" step="0.01" class="form-control" readonly value="{{ingredient.adjusted_price_with_vat}}">
+                </div>
+              </div>
+
+
+            <div class="col-md-4">
+              <label for="supplier" class="form-label">Supplier</label>
+              <select name="supplier" id="supplier" required class="form-control">
+                {% for supplier in supplier_options %}
+                  <option value="{{ supplier.id }}" {% if selected_supplier == supplier.name %}selected{% endif %}>{{ supplier.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="allergens" class="form-label">Allergens</label>
+                <select name="allergens" id="allergens" multiple required class="form-control">
+                  {% for allergen in allergens_list %}
+                    <option value="{{ allergen }}" {% if allergen in selected_allergens %}selected{% endif %}>{{ allergen }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label for="obs" class="form-label">Observations/Comments</label>
+              <textarea name="obs" placeholder="Observations" id="obs" class="form-control" rows="4" cols="50" value="{{ingredient.obs}}"></textarea>
+            </div>
+          </div>
+
+        <div class="col-md-4 mt-2">
+            <button type="submit" class="btn btn-primary">{{ page_title }}</button>
+          </form>
+            <button type="button" onclick="history.back()" class="btn btn-primary">Go back</button>
+        </div>
+
+</div>
+
+<script>
+        document.getElementById("price-unit").addEventListener("input", function() {
+            console.log(this.value);
+            update_price_vat();
+            calculate_adjusted_price()
+        });
+
+        document.getElementById("yield").addEventListener("input", function() {
+            console.log(this.value);
+            calculate_adjusted_price()
+        });
+        document.getElementById("adjusted-price").addEventListener("input", function() {
+            console.log(this.value);
+            update_adjusted_price_vat();
+        });
+
+        document.getElementById("vat-percentage").addEventListener("input", function() {
+            console.log(this.value);
+            update_price_vat();
+            update_adjusted_price_vat()
+        });
+
+        function update_price_vat(){
+            price_unit = document.getElementById("price-unit").value;
+            vat = document.getElementById("vat-percentage").value;
+
+            final_price = parseFloat((price_unit * (vat / 100 + 1)).toFixed(2));
+
+            document.getElementById("price-with-vat").value = final_price;
+        }
+
+        function update_adjusted_price_vat(){
+            price_unit = document.getElementById("adjusted-price").value;
+            vat = document.getElementById("vat-percentage").value;
+
+            final_price = parseFloat((price_unit * (vat / 100 + 1)).toFixed(2));
+
+            document.getElementById("adjusted-price-with-vat").value = final_price;
+        }
+
+        function calculate_adjusted_price(){
+          price_unit = document.getElementById("price-unit").value;
+          yield = parseInt(document.getElementById("yield").value) / 100;
+          // To calculate adjusted price we need to start by calc the yield value -> (yield/100)*quantity
+          // Then apply regra três simples -> (quantity * price) / yield value
+          adjusted_price = parseFloat((price_unit * (1 + (1 - yield))).toFixed(2));
+
+          document.getElementById("adjusted-price").value = adjusted_price;
+
+        }
+</script>
+{% endblock %}

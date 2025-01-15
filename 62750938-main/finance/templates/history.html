@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Transaction History
+{% endblock %}
+
+{% block main %}
+
+<div class="mb-3">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Symbol</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+            <th scope="col">Date</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for transaction in user_transactions %}
+                <tr>
+                    <td>{{transaction.type}}</td>
+                    <td>{{transaction.symbol}}</td>
+                    <td>{{transaction.quantity}}</td>
+                    <td>{{transaction.unit_price | float | usd}}</td>
+                    <td>{{transaction.date}}</td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+{% endblock %}

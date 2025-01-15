@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    - {{ page_title }}
+{% endblock %}
+
+{% block main %}
+
+
+<div class="mb-3">
+    <form action="/recipes" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <input type="hidden" name="is_edit" value="{{ is_edit }}">
+                <input type="hidden" name="id" value="{{ recipe.id }}">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" name="name" placeholder="recipe name" class="form-control" value="{{recipe.name}}">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="yield" class="form-label">Yield</label>
+                <input type="number" id="yield" name="yield" class="form-control" value="{{recipe.yield}}">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="photo" class="form-label">Photo</label>
+                <input type="file" id="photo" name="photo" class="form-control">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="method" class="form-label">Method</label>
+                <textarea id="method" name="method" class="form-control">{{recipe.method}}</textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="price_portion" class="form-label">Price per portion</label>
+                <input type="number" id="price_portion" name="price_portion" step="0.01" class="form-control" value="{{recipe.price_portion}}">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="price_total" class="form-label">Price per recipe</label>
+                <input type="number" id="price_total" name="price_total" step="0.01" class="form-control" value="{{recipe.price_total}}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="is_subrecipe" class="form-label">Is subrecipe</label>
+                <select name="is_subrecipe" id="is_subrecipe" required class="form-control">
+                    <option value=0 {% if recipe.is_subrecipe == 0 %}selected{% endif %}>No</option>
+                    <option value=1 {% if recipe.is_subrecipe == 1 %}selected{% endif %}>Yes</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" class="form-control" >{{recipe.description}}</textarea>
+              </div>
+            </div>
+          </div>
+
+
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary">{{ page_title }}</button>
+          </form>
+            <button type="button" onclick="history.back()" class="btn btn-primary">Go back</button>
+        </div>
+
+      {% include 'recipe_ingredients.html' %}
+</div>
+
+
+{% endblock %}

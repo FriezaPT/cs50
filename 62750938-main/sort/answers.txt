@@ -1,0 +1,24 @@
+sort1 uses: bubble sort
+
+How do you know?:
+From the times we can see that the best case scenario is really quick, and the worst case scenario is really slow, consistent with the bubble sort.
+random: 0m5,424s
+sorted: 0m0,413s
+reversed: 0m4,865s
+
+sort2 uses: merge
+
+How do you know?:
+All the cases are consistent in terms of time, and all those cases are pretty quick.
+sorted: 0m0,411s
+reversed: 0m0,434s
+random: 0m0,413s
+
+
+sort3 uses: Selection sort
+
+How do you know?:
+All the cases are consistent in terms of time but all the cases are really slow compared to sort2
+sorted: 0m2,117s
+reversed: 0m2,421s
+random: 0m2,126s

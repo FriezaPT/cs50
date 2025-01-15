@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    - {{ page_title }}
+{% endblock %}
+
+{% block main %}
+
+
+<div class="mb-3">
+    <form action="/ingredient_types" method="post">
+        <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <input type="hidden" name="is_edit" value="{{ is_edit }}">
+                <input type="hidden" name="id" value="{{ ingredient_type.id }}">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" name="name" id="name" placeholder="Ingredient Type" class="form-control" value="{{ingredient_type.name}}">
+              </div>
+            </div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary">{{ page_title }}</button>
+        </form>
+            <button type="button" onclick="history.back()" class="btn btn-primary">Go back</button>
+        </div>
+</div>
+
+
+{% endblock %}

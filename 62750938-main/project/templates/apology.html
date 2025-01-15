@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Apology
+{% endblock %}
+
+{% block main %}
+    <!-- https://memegen.link/ -->
+    <!-- https://knowyourmeme.com/memes/grumpy-cat -->
+    <img alt="Unable to load image" class="border img-fluid" src="{{ url_for('static', filename='apology.jpg') }}" title="Apologies">
+    {{data}}
+{% endblock %}
